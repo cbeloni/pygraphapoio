@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import pygal
+from pygal.style import NeonStyle
 
 class GrafLinha:
     '''
@@ -8,7 +9,7 @@ class GrafLinha:
     '''
     def __init__(self, periodo,titulo):
         self.periodo = periodo        
-        self.line_chart = pygal.Line(explicit_size=True, width=800, height=600)        
+        self.line_chart = pygal.Line(explicit_size=True, width=800, height=600, fill=True, interpolate='cubic', style=NeonStyle)        
         self.line_chart.title =  titulo
         self.line_chart.x_labels = map(str, self.periodo)
     
