@@ -4,14 +4,24 @@ from Grafico import GrafLinha
 from CherryPy import Home
 import cherrypy
 import os
+import cx_Oracle
+con = cx_Oracle.connect('hr/hr@192.168.0.104/xe')
+cur = con.cursor()
+cur.execute("SELECT count(1),to_char(process_date,'hh24:mi dd/mm/yyyy') FROM sys.bko_apoio_0001 group by to_char(process_date,'hh24:mi dd/mm/yyyy')  order by 2 asc")    
+valores = []
+indice = []
+
+for result in cur:
+    valores.append(result[0])
+    indice.append(result[1])
+print valores    
+cur.close()
+con.close() 
 
 class Main(Home):
-    def __init__(self):
-        graf = GrafLinha(range(2002, 2013), 'Browser usage evolution (in %)')
-        graf.adicionar_linha('Firefox',[None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-        graf.adicionar_linha('Chrome', [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-        graf.adicionar_linha('IE',     [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-        graf.adicionar_linha('Others', [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
+    def __init__(self): 
+        graf = GrafLinha(indice, 'Browser usage evolution (in %)')
+        graf.adicionar_linha('Dados',valores)
         graf.renderizar_arquivo('./public/graf.svg')
 
 if __name__ == '__main__':

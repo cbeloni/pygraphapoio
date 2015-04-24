@@ -42,6 +42,12 @@ deactivate nondestructive
 VIRTUAL_ENV="/home/caue/Documentos/PyGraphApoio/venv"
 export VIRTUAL_ENV
 
+#export cx_Oracle
+LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client/lib
+export LD_LIBRARY_PATH
+ORACLE_HOME=/usr/lib/oracle/11.2/client/lib
+export ORACLE_HOME
+
 _OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
@@ -78,3 +84,4 @@ alias pydoc="python -m pydoc"
 if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
     hash -r 2>/dev/null
 fi
+
