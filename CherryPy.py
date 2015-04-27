@@ -10,11 +10,14 @@ class Home(object):
         self.nome_tabela = 'hr.bko_apoio_0001'
 
     def index(self):
-        ora = self.obter_dados()
-        valores, indice = self.valores, self.indice
-        ora.fechar()
-        titulo = 'Registros processados: %s' % (sum(valores))
-        graf = GrafLinha(indice,titulo )
+        con_oracle = ConOracle('hr/hr@192.168.0.104/xe')        
+        valores, indice = con_oracle.dados_process_not_null(self.nome_tabela)
+        valores_pendentes = con_oracle.dados_process_null(self.nome_tabela)
+        con_oracle.fechar()
+
+        titulo = '''Registros processados: %s \n 
+                    Registros pendentes: %s ''' % (sum(valores),sum(valores_pendentes))
+        graf = GrafLinha(indice,titulo )        
         graf.adicionar_linha(self.nome_tabela,valores)
         graf.renderizar_arquivo('./public/graf.svg')
 
@@ -27,22 +30,6 @@ class Home(object):
 
         return self.index()
     tabela.exposed = True
-
-    def obter_dados(self):
-        ora = ConOracle()
-        query = """ SELECT count(1),to_char(process_date,'!hh24mi') 
-                      FROM %s 
-                     where process_status is not null  
-                  group by to_char(process_date,'!hh24mi')  order by 2 asc""" % (self.nome_tabela)
-
-        cursor_process_not_null =  ora.execute(query)
-        self.valores = []
-        self.indice = []
-        for result in cursor_process_not_null:
-            self.valores.append(result[0])
-            self.indice.append(result[1])
-
-        return ora
 
 if __name__ == '__main__':
     conf = {

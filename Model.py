@@ -3,14 +3,41 @@
 import cx_Oracle
 
 class ConOracle:
-    def __init__(self):
-        self.con = cx_Oracle.connect('hr/hr@192.168.0.104/xe')
+    def __init__(self,string_conexao):
+        self.con = cx_Oracle.connect(string_conexao)
         self.cur = self.con.cursor()
 
     def execute(self, query):
         self.cur.execute(query)
-        print (self.cur)
         return self.cur    
+
+    def dados_process_not_null(self,nome_tabela):
+        query = """ SELECT count(1),to_char(process_date,'!hh24mi') 
+                      FROM %s 
+                     where process_status is not null  
+                  group by to_char(process_date,'!hh24mi')  order by 2 asc""" % (nome_tabela)
+
+        cursor_process_not_null =  self.execute(query)
+
+        valores = []
+        indice = []
+        for result in cursor_process_not_null:
+            valores.append(result[0])
+            indice.append(result[1])    
+
+        return valores, indice
+
+    def dados_process_null(self,nome_tabela):
+        query = """ SELECT count(1) 
+                      FROM %s 
+                     where process_status is null """ % (nome_tabela)
+
+        cursor_process_null =  self.execute(query)
+        valores = []
+        for result in cursor_process_null:
+            valores.append(result[0])
+
+        return valores
 
     def fechar(self):  
         self.cur.close()
