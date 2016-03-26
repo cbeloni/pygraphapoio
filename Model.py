@@ -12,10 +12,10 @@ class ConOracle:
         return self.cur    
 
     def dados_process_not_null(self,nome_tabela):
-        query = """ SELECT count(1),to_char(process_date,'!hh24mi') 
+        query = """ SELECT count(1),to_char(process_date,'hh24') 
                       FROM %s 
                      where process_status is not null  
-                  group by to_char(process_date,'!hh24mi')  order by 2 asc""" % (nome_tabela)
+                  group by to_char(process_date,'hh24')  order by 2 asc""" % (nome_tabela)
 
         cursor_process_not_null =  self.execute(query)
 

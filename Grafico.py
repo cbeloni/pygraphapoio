@@ -19,6 +19,7 @@ class GrafLinha:
         valores: lista com os valores a serem incrementados
         '''
         self.line_chart.add(nome,  valores) 
+        
     def renderizar_arquivo(self,nome_arquivo):
         self.line_chart.render_to_file(nome_arquivo)
 

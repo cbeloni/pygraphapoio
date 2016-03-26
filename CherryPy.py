@@ -7,10 +7,10 @@ import os
 
 class Home(object):
     def __init__(self):
-        self.nome_tabela = 'hr.bko_apoio_0001'
+        self.nome_tabela = 'bko_apoio_6884'
 
     def index(self):
-        con_oracle = ConOracle('hr/hr@192.168.0.104/xe')        
+        con_oracle = ConOracle('adminprov2_10/adminpro@172.22.4.30/bda')
         valores, indice = con_oracle.dados_process_not_null(self.nome_tabela)
         valores_pendentes = con_oracle.dados_process_null(self.nome_tabela)
         con_oracle.fechar()
